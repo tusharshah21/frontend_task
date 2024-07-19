@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import './commonInput.css'
+import { Button,Input } from "antd";
 const InputHandler = ({ onSubmit, editMode = false }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -7,29 +8,43 @@ const InputHandler = ({ onSubmit, editMode = false }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name || !email) return;
-    onSubmit({ name, email });
+    const validateMail = (email) => {
+      const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return regex.test(email);
+    };
+    if(validateMail(email)){
+      onSubmit({ name, email });
+      console.log(name)
+      setEmail("");
+      setName("");
+    }
+    else{
+      alert("Enter valid Email")
+    }
   };
 
   return (
-    <div className="header-box">
-      <input
-        type="text"
+    <form onSubmit={handleSubmit} className="form-container">
+      <Input
+        value={name}
         placeholder="Name"
-        onChange={(e) => {
-          setName(e.target.value);
-        }}
+        required
+        onChange={(e) => 
+          setName(e.target.value)
+        }
       />
-      <input
-        type="text"
+      <Input
+        value={email}
         placeholder="Email"
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
+        required
+        onChange={(e) => 
+          setEmail(e.target.value)
+        }
       />
-      <button type="primary">
+      <Button type="primary" htmlType="submit">
         {!!editMode ? "Edit user" : "Add user"}
-      </button>
-    </div>
+      </Button>
+    </form>
   );
 };
 

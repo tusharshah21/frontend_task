@@ -28,3 +28,33 @@ export const addUser = (payload) => async dispatch => {
     console.log(e);
   }
 };
+export const deleteUser = (userId) => async (dispatch) => {
+  try {
+    const response = await fetch(`http://example.com/user/${userId}`, {
+      method: "DELETE",
+    });
+    const parsedResponse = await response.json();
+    if (parsedResponse.success) {
+      dispatch(getUsers());
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
+export const editUser = (user) => async (dispatch) => {
+  try {
+    const response = await fetch(`http://example.com/user/${user.id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
+    const parsedResponse = await response.json();
+    if (parsedResponse.success) {
+      dispatch(getUsers());
+    }
+  } catch (e) {
+    console.log(e);
+  }
+};
